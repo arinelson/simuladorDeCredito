@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Empréstimo Pessoal</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Estilos personalizados */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Fundo principal: Cinza-escuro */
+            color: #d1d5db; /* Texto de corpo: Cinza claro */
+        }
+        
+        /* Efeito de brilho (glow) para o card principal */
+        .card-glow {
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.3), 0 0 10px rgba(16, 185, 129, 0.2);
+        }
+        
+        /* Estilização customizada para o slider */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #374151; /* Fundo do slider */
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #10b981; /* Cor de destaque (verde) */
+            cursor: pointer;
+            border-radius: 50%;
+            border: 4px solid #1f2937; /* Cor do card */
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: #10b981;
+            cursor: pointer;
+            border-radius: 50%;
+             border: 4px solid #1f2937;
+        }
+
+        /* Animação de fade-in para os resultados */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Efeito máquina de escrever */
+        .typewriter-cursor::after {
+            content: '|';
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Container Principal -->
+    <div class="container mx-auto px-4 py-8 md:py-16">
+
+        <!-- Header -->
+        <header class="text-center mb-12 md:mb-16">
+            <h1 class="text-4xl md:text-5xl font-black text-white mb-4">
+                Crédito para <span id="typewriter" class="text-[#10b981] typewriter-cursor"></span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-lg text-gray-400">
+                Crédito rápido e sem burocracia para você realizar seus sonhos. Simule agora e encontre a melhor opção.
+            </p>
+        </header>
+
+        <main>
+            <!-- Card do Simulador -->
+            <section id="simulator" class="max-w-3xl mx-auto bg-[#1f2937] p-6 sm:p-8 rounded-2xl card-glow mb-20">
+                <!-- Inputs -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <!-- Valor do Empréstimo -->
+                    <div>
+                        <label for="loanAmount" class="block text-sm font-medium text-gray-400 mb-2">Quanto você precisa?</label>
+                        <div class="text-white text-3xl font-bold mb-3">
+                            R$ <span id="loanAmountValue">25,000</span>
+                        </div>
+                        <input type="range" id="loanAmount" min="1000" max="50000" step="500" value="25000" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                    </div>
+
+                    <!-- Parcelas -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Em quantas parcelas?</label>
+                        <div id="installments" class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                            <button data-term="12" class="term-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition">12x</button>
+                            <button data-term="24" class="term-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition">24x</button>
+                            <button data-term="36" class="term-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition selected">36x</button>
+                            <button data-term="48" class="term-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition">48x</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão de Ação -->
+                <button id="simulateBtn" class="w-full bg-[#10b981] hover:bg-[#059669] text-white font-bold py-4 px-4 rounded-xl text-lg transition-transform transform hover:scale-105">
+                    Simular Agora
+                </button>
+
+                <!-- Área de Resultados -->
+                <div id="results" class="mt-8 space-y-4">
+                    <!-- Os resultados da simulação serão inseridos aqui via JS -->
+                </div>
+            </section>
+
+            <!-- Seção de Vantagens -->
+            <section id="advantages" class="max-w-5xl mx-auto text-center mb-20">
+                <h2 class="text-3xl font-bold text-white mb-10">Por que escolher nosso crédito?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Vantagem 1 -->
+                    <div class="bg-[#1f2937] p-6 rounded-xl">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-[#10b981] mx-auto mb-4">
+                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-2">Aprovação Rápida</h3>
+                        <p class="text-gray-400">Receba uma resposta em poucos minutos após o envio da sua proposta.</p>
+                    </div>
+                    <!-- Vantagem 2 -->
+                    <div class="bg-[#1f2937] p-6 rounded-xl">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-[#10b981] mx-auto mb-4">
+                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-2">100% Online</h3>
+                        <p class="text-gray-400">Todo o processo é feito digitalmente, do seu celular ou computador.</p>
+                    </div>
+                    <!-- Vantagem 3 -->
+                    <div class="bg-[#1f2937] p-6 rounded-xl">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-full bg-[#10b981] mx-auto mb-4">
+                            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-2">Seguro e Confiável</h3>
+                        <p class="text-gray-400">Seus dados estão protegidos com a mais alta tecnologia de segurança.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção FAQ -->
+            <section id="faq" class="max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-white text-center mb-10">Perguntas Frequentes</h2>
+                <div class="space-y-4">
+                    <!-- Pergunta 1 -->
+                    <div class="bg-[#1f2937] rounded-lg">
+                        <button class="faq-question w-full flex justify-between items-center text-left p-5">
+                            <span class="text-lg font-medium text-white">Preciso ter nome limpo para conseguir o empréstimo?</span>
+                            <svg class="faq-arrow h-6 w-6 text-gray-400 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </button>
+                        <div class="faq-answer hidden p-5 pt-0">
+                            <p class="text-gray-400">Realizamos uma análise de crédito completa. Mesmo que você tenha alguma restrição, sua proposta será avaliada. A aprovação dependerá do resultado da análise de seu perfil financeiro.</p>
+                        </div>
+                    </div>
+                    <!-- Pergunta 2 -->
+                    <div class="bg-[#1f2937] rounded-lg">
+                        <button class="faq-question w-full flex justify-between items-center text-left p-5">
+                            <span class="text-lg font-medium text-white">Quais documentos são necessários?</span>
+                            <svg class="faq-arrow h-6 w-6 text-gray-400 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </button>
+                        <div class="faq-answer hidden p-5 pt-0">
+                            <p class="text-gray-400">O processo é simplificado. Inicialmente, pedimos apenas um documento de identificação com foto (RG ou CNH) e um comprovante de residência. Outros documentos podem ser solicitados durante a análise.</p>
+                        </div>
+                    </div>
+                    <!-- Pergunta 3 -->
+                    <div class="bg-[#1f2937] rounded-lg">
+                        <button class="faq-question w-full flex justify-between items-center text-left p-5">
+                            <span class="text-lg font-medium text-white">Em quanto tempo o dinheiro cai na conta?</span>
+                            <svg class="faq-arrow h-6 w-6 text-gray-400 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </button>
+                        <div class="faq-answer hidden p-5 pt-0">
+                            <p class="text-gray-400">Após a aprovação do seu contrato, o valor é transferido para sua conta bancária em até 24 horas úteis. É muito rápido!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 mt-20 pt-8 border-t border-gray-800">
+            <p>Empresa Fictícia de Crédito LTDA - CNPJ: 00.000.000/0001-00</p>
+            <p>Avenida Exemplo, 123 - Cidade Exemplo, EX</p>
+            <p class="mt-2 text-sm">O Custo Efetivo Total (CET) pode variar de 1.5% a 5% ao mês (19.56% a 79.59% ao ano), dependendo da análise de crédito do cliente e do prazo de pagamento. Todos os valores são exemplos e podem sofrer alterações.</p>
+            <p class="mt-4">&copy; <span id="currentYear"></span> Todos os direitos reservados.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- ELEMENTOS DO DOM ---
+            const loanAmountSlider = document.getElementById('loanAmount');
+            const loanAmountValue = document.getElementById('loanAmountValue');
+            const installmentsContainer = document.getElementById('installments');
+            const simulateBtn = document.getElementById('simulateBtn');
+            const resultsContainer = document.getElementById('results');
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            const typewriterElement = document.getElementById('typewriter');
+            
+            let selectedTerm = 36; // Valor padrão
+
+            // --- LÓGICA DO TYPEWRITER ---
+            const typewriterWords = ["reformar sua casa", "comprar seu carro", "abrir seu negócio", "realizar seu sonho"];
+            let wordIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+
+            function type() {
+                const currentWord = typewriterWords[wordIndex];
+                const displayedText = isDeleting 
+                    ? currentWord.substring(0, charIndex--) 
+                    : currentWord.substring(0, charIndex++);
+                
+                typewriterElement.textContent = displayedText;
+
+                if (!isDeleting && charIndex === currentWord.length + 1) {
+                    setTimeout(() => isDeleting = true, 2000); // Pausa antes de apagar
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    wordIndex = (wordIndex + 1) % typewriterWords.length;
+                }
+                
+                const typeSpeed = isDeleting ? 75 : 150;
+                setTimeout(type, typeSpeed);
+            }
+            
+            type();
+
+
+            // --- LÓGICA DO SIMULADOR ---
+
+            // Atualiza o valor exibido ao mover o slider
+            loanAmountSlider.addEventListener('input', (e) => {
+                const value = parseInt(e.target.value).toLocaleString('pt-BR');
+                loanAmountValue.textContent = value;
+            });
+
+            // Seleciona o número de parcelas
+            installmentsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('term-btn')) {
+                    // Remove a seleção de outros botões
+                    installmentsContainer.querySelectorAll('.term-btn').forEach(btn => {
+                        btn.classList.remove('selected', 'bg-[#10b981]');
+                        btn.classList.add('bg-gray-700');
+                    });
+                    
+                    // Adiciona seleção ao botão clicado
+                    e.target.classList.add('selected', 'bg-[#10b981]');
+                    e.target.classList.remove('bg-gray-700');
+                    selectedTerm = parseInt(e.target.dataset.term);
+                }
+            });
+            
+            // Lógica de cálculo do empréstimo (fórmula de Tabela Price)
+            function calculateLoan(principal, term) {
+                // Taxa de juros varia com o prazo para simular condições reais
+                const monthlyInterestRate = term <= 12 ? 0.025 : (term <= 24 ? 0.022 : (term <= 36 ? 0.019 : 0.018));
+                
+                if (principal <= 0 || term <= 0) return null;
+
+                const i = monthlyInterestRate;
+                const n = term;
+                
+                const installmentValue = principal * (i * Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1);
+                const totalValue = installmentValue * n;
+                const cet = (monthlyInterestRate * 100).toFixed(2);
+
+                return {
+                    installmentValue: installmentValue.toFixed(2),
+                    totalValue: totalValue.toFixed(2),
+                    cet: cet,
+                    term: term
+                };
+            }
+
+            // Ação de simular
+            simulateBtn.addEventListener('click', () => {
+                const amount = parseInt(loanAmountSlider.value);
+                
+                resultsContainer.innerHTML = ''; // Limpa resultados anteriores
+                
+                const resultData = calculateLoan(amount, selectedTerm);
+
+                if (resultData) {
+                    const resultCard = createResultCard(resultData);
+                    resultsContainer.appendChild(resultCard);
+                }
+            });
+            
+            // Cria o card de resultado dinamicamente
+            function createResultCard(data) {
+                const card = document.createElement('div');
+                card.className = 'bg-[#374151] p-5 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4 fade-in';
+                
+                const formattedInstallment = parseFloat(data.installmentValue).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                const formattedTotal = parseFloat(data.totalValue).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+                card.innerHTML = `
+                    <div>
+                        <p class="text-white font-bold text-xl">${data.term}x de <span class="text-[#22c55e]">${formattedInstallment}</span></p>
+                        <p class="text-sm text-gray-400">Total a pagar: ${formattedTotal} (CET: ${data.cet.replace('.',',')}% a.m.)</p>
+                    </div>
+                    <button 
+                        class="whatsapp-btn w-full sm:w-auto bg-[#25D366] hover:bg-[#1DAE51] text-white font-bold py-2 px-6 rounded-lg transition whitespace-nowrap"
+                        data-amount="${loanAmountSlider.value}"
+                        data-term="${data.term}"
+                        data-installment="${data.installmentValue}"
+                    >
+                        Contratar via WhatsApp
+                    </button>
+                `;
+                return card;
+            }
+
+            // --- LÓGICA DO WHATSAPP ---
+            resultsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('whatsapp-btn')) {
+                    const button = e.target;
+                    const amount = parseInt(button.dataset.amount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                    const term = button.dataset.term;
+                    const installment = parseFloat(button.dataset.installment).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+                    const message = `Olá! Tenho interesse em contratar um empréstimo. Simulei no site o valor de ${amount} e gostaria da opção de ${term} parcelas de ${installment}. Podemos continuar?`;
+                    const phoneNumber = '558299342071'; // SUBSTITUA PELO NÚMERO DE TELEFONE REAL
+                    
+                    const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+                    
+                    window.open(whatsappUrl, '_blank');
+                }
+            });
+
+            // --- LÓGICA DO FAQ (ACCORDION) ---
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const answer = question.nextElementSibling;
+                    const arrow = question.querySelector('.faq-arrow');
+
+                    answer.classList.toggle('hidden');
+                    arrow.classList.toggle('rotate-180');
+                });
+            });
+
+            // --- FOOTER ---
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            // --- INICIALIZAÇÃO ---
+            // Seleciona o botão de 36x por padrão ao carregar a página
+            document.querySelector('.term-btn[data-term="36"]').classList.add('selected', 'bg-[#10b981]');
+            document.querySelector('.term-btn[data-term="36"]').classList.remove('bg-gray-700');
+        });
+    </script>
+</body>
+</html>
