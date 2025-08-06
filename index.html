@@ -93,29 +93,40 @@
 
         <main>
             <!-- Card do Simulador -->
-            <section id="simulator" class="max-w-3xl mx-auto bg-[#1f2937] p-6 sm:p-8 rounded-2xl card-glow mb-20">
+            <section id="simulator" class="max-w-3xl mx-auto bg-[#1f2937] p-6 sm:p-8 rounded-2xl card-glow mb-8">
                 <!-- Inputs -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                     <!-- Valor do Empréstimo -->
                     <div>
                         <label for="loanAmount" class="block text-sm font-medium text-gray-400 mb-2">Quanto você precisa?</label>
                         <div class="text-white text-3xl font-bold mb-3">
-                            R$ <span id="loanAmountValue">25,000</span>
+                            R$ <span id="loanAmountValue">500</span>
                         </div>
-                        <input type="range" id="loanAmount" min="1000" max="50000" step="500" value="25000" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                        <input type="range" id="loanAmount" min="50" max="1500" step="50" value="500" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
                     </div>
 
-                    <!-- Parcelas -->
+                    <!-- Modos de Pagamento -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-400 mb-2">Em quantas parcelas?</label>
-                        <div id="installments" class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-                            <button data-term="12" class="term-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition">12x</button>
-                            <button data-term="24" class="term-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition">24x</button>
-                            <button data-term="36" class="term-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition selected">36x</button>
-                            <button data-term="48" class="term-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition">48x</button>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Como você quer pagar?</label>
+                        <div id="paymentModes" class="grid grid-cols-3 gap-3 text-center">
+                            <button data-mode="pix" class="mode-btn bg-[#10b981] text-white font-semibold py-3 px-4 rounded-lg transition">Pix</button>
+                            <button data-mode="parcelado" class="mode-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition">Parcelado</button>
+                            <button data-mode="cartao" class="mode-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition">Cartão</button>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Opções de Parcelamento (inicialmente oculto) -->
+                <div id="installmentOptionsWrapper" class="hidden mb-8">
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Em quantas parcelas?</label>
+                    <div id="installments" class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                        <button data-term="2" class="term-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition">2x</button>
+                        <button data-term="3" class="term-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition">3x</button>
+                        <button data-term="6" class="term-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition">6x</button>
+                        <button data-term="12" class="term-btn bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition">12x</button>
+                    </div>
+                </div>
+
 
                 <!-- Botão de Ação -->
                 <button id="simulateBtn" class="w-full bg-[#10b981] hover:bg-[#059669] text-white font-bold py-4 px-4 rounded-xl text-lg transition-transform transform hover:scale-105">
@@ -127,6 +138,14 @@
                     <!-- Os resultados da simulação serão inseridos aqui via JS -->
                 </div>
             </section>
+            
+            <!-- Botão para valores maiores -->
+            <div class="text-center mb-20">
+                 <button id="negotiateBtn" class="bg-transparent hover:bg-[#1f2937] text-[#10b981] font-semibold py-2 px-4 border border-[#10b981] rounded-lg transition">
+                    Precisa de mais de R$ 1.500? Negocie um valor maior
+                 </button>
+            </div>
+
 
             <!-- Seção de Vantagens -->
             <section id="advantages" class="max-w-5xl mx-auto text-center mb-20">
@@ -183,25 +202,14 @@
                             <p class="text-gray-400">O processo é simplificado. Inicialmente, pedimos apenas um documento de identificação com foto (RG ou CNH) e um comprovante de residência. Outros documentos podem ser solicitados durante a análise.</p>
                         </div>
                     </div>
-                    <!-- Pergunta 3 -->
-                    <div class="bg-[#1f2937] rounded-lg">
-                        <button class="faq-question w-full flex justify-between items-center text-left p-5">
-                            <span class="text-lg font-medium text-white">Em quanto tempo o dinheiro cai na conta?</span>
-                            <svg class="faq-arrow h-6 w-6 text-gray-400 transform transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                        </button>
-                        <div class="faq-answer hidden p-5 pt-0">
-                            <p class="text-gray-400">Após a aprovação do seu contrato, o valor é transferido para sua conta bancária em até 24 horas úteis. É muito rápido!</p>
-                        </div>
-                    </div>
                 </div>
             </section>
         </main>
 
         <!-- Footer -->
         <footer class="text-center text-gray-500 mt-20 pt-8 border-t border-gray-800">
-            <p>Empresa Fictícia de Crédito LTDA - CNPJ: 00.000.000/0001-00</p>
-            <p>Avenida Exemplo, 123 - Cidade Exemplo, EX</p>
-            <p class="mt-2 text-sm">O Custo Efetivo Total (CET) pode variar de 1.5% a 5% ao mês (19.56% a 79.59% ao ano), dependendo da análise de crédito do cliente e do prazo de pagamento. Todos os valores são exemplos e podem sofrer alterações.</p>
+          
+            <p class="mt-2 text-sm">A taxa de juros para pagamentos via Pix e Parcelado é de 25% sobre o valor solicitado. Para pagamentos via Cartão de Crédito, as taxas são a consultar devido às tarifas da operadora da máquina.</p>
             <p class="mt-4">&copy; <span id="currentYear"></span> Todos os direitos reservados.</p>
         </footer>
 
@@ -209,16 +217,24 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- CONSTANTES E VARIÁVEIS GLOBAIS ---
+            const phoneNumber = '558299342071'; // SUBSTITUA PELO NÚMERO DE TELEFONE REAL
+            const interestRate = 0.25; // Taxa de juros de 25%
+
             // --- ELEMENTOS DO DOM ---
             const loanAmountSlider = document.getElementById('loanAmount');
             const loanAmountValue = document.getElementById('loanAmountValue');
+            const paymentModesContainer = document.getElementById('paymentModes');
+            const installmentOptionsWrapper = document.getElementById('installmentOptionsWrapper');
             const installmentsContainer = document.getElementById('installments');
             const simulateBtn = document.getElementById('simulateBtn');
             const resultsContainer = document.getElementById('results');
+            const negotiateBtn = document.getElementById('negotiateBtn');
             const faqQuestions = document.querySelectorAll('.faq-question');
             const typewriterElement = document.getElementById('typewriter');
             
-            let selectedTerm = 36; // Valor padrão
+            let selectedMode = 'pix'; // Modo padrão
+            let selectedTerm = 2; // Parcela padrão
 
             // --- LÓGICA DO TYPEWRITER ---
             const typewriterWords = ["reformar sua casa", "comprar seu carro", "abrir seu negócio", "realizar seu sonho"];
@@ -235,7 +251,7 @@
                 typewriterElement.textContent = displayedText;
 
                 if (!isDeleting && charIndex === currentWord.length + 1) {
-                    setTimeout(() => isDeleting = true, 2000); // Pausa antes de apagar
+                    setTimeout(() => isDeleting = true, 2000);
                 } else if (isDeleting && charIndex === 0) {
                     isDeleting = false;
                     wordIndex = (wordIndex + 1) % typewriterWords.length;
@@ -247,107 +263,138 @@
             
             type();
 
+            // --- FUNÇÕES AUXILIARES ---
+            const formatCurrency = (value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
             // --- LÓGICA DO SIMULADOR ---
 
             // Atualiza o valor exibido ao mover o slider
             loanAmountSlider.addEventListener('input', (e) => {
-                const value = parseInt(e.target.value).toLocaleString('pt-BR');
-                loanAmountValue.textContent = value;
+                loanAmountValue.textContent = parseInt(e.target.value).toLocaleString('pt-BR');
+            });
+
+            // Seleciona o modo de pagamento
+            paymentModesContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('mode-btn')) {
+                    const button = e.target;
+                    selectedMode = button.dataset.mode;
+                    
+                    // Atualiza estilo dos botões de modo
+                    paymentModesContainer.querySelectorAll('.mode-btn').forEach(btn => {
+                        btn.classList.remove('bg-[#10b981]');
+                        btn.classList.add('bg-gray-700', 'hover:bg-gray-600');
+                    });
+                    button.classList.add('bg-[#10b981]');
+                    button.classList.remove('bg-gray-700', 'hover:bg-gray-600');
+
+                    // Mostra/esconde opções de parcelamento
+                    if (selectedMode === 'parcelado') {
+                        installmentOptionsWrapper.classList.remove('hidden');
+                    } else {
+                        installmentOptionsWrapper.classList.add('hidden');
+                    }
+                    resultsContainer.innerHTML = ''; // Limpa resultados ao trocar de modo
+                }
             });
 
             // Seleciona o número de parcelas
             installmentsContainer.addEventListener('click', (e) => {
                 if (e.target.classList.contains('term-btn')) {
-                    // Remove a seleção de outros botões
+                    const button = e.target;
+                    selectedTerm = parseInt(button.dataset.term);
+
                     installmentsContainer.querySelectorAll('.term-btn').forEach(btn => {
-                        btn.classList.remove('selected', 'bg-[#10b981]');
-                        btn.classList.add('bg-gray-700');
+                        btn.classList.remove('bg-[#10b981]');
+                        btn.classList.add('bg-gray-700', 'hover:bg-gray-600');
                     });
-                    
-                    // Adiciona seleção ao botão clicado
-                    e.target.classList.add('selected', 'bg-[#10b981]');
-                    e.target.classList.remove('bg-gray-700');
-                    selectedTerm = parseInt(e.target.dataset.term);
+                    button.classList.add('bg-[#10b981]');
+                    button.classList.remove('bg-gray-700', 'hover:bg-gray-600');
                 }
             });
             
-            // Lógica de cálculo do empréstimo (fórmula de Tabela Price)
-            function calculateLoan(principal, term) {
-                // Taxa de juros varia com o prazo para simular condições reais
-                const monthlyInterestRate = term <= 12 ? 0.025 : (term <= 24 ? 0.022 : (term <= 36 ? 0.019 : 0.018));
-                
-                if (principal <= 0 || term <= 0) return null;
-
-                const i = monthlyInterestRate;
-                const n = term;
-                
-                const installmentValue = principal * (i * Math.pow(1 + i, n)) / (Math.pow(1 + i, n) - 1);
-                const totalValue = installmentValue * n;
-                const cet = (monthlyInterestRate * 100).toFixed(2);
-
-                return {
-                    installmentValue: installmentValue.toFixed(2),
-                    totalValue: totalValue.toFixed(2),
-                    cet: cet,
-                    term: term
-                };
-            }
-
             // Ação de simular
             simulateBtn.addEventListener('click', () => {
                 const amount = parseInt(loanAmountSlider.value);
-                
                 resultsContainer.innerHTML = ''; // Limpa resultados anteriores
                 
-                const resultData = calculateLoan(amount, selectedTerm);
-
-                if (resultData) {
-                    const resultCard = createResultCard(resultData);
+                let resultCard;
+                switch (selectedMode) {
+                    case 'pix':
+                        resultCard = createPixCard(amount);
+                        break;
+                    case 'parcelado':
+                        resultCard = createInstallmentCard(amount, selectedTerm);
+                        break;
+                    case 'cartao':
+                        resultCard = createCreditCard(amount);
+                        break;
+                }
+                
+                if (resultCard) {
                     resultsContainer.appendChild(resultCard);
                 }
             });
             
-            // Cria o card de resultado dinamicamente
-            function createResultCard(data) {
+            // --- FUNÇÕES DE CRIAÇÃO DE CARDS DE RESULTADO ---
+
+            function createBaseCard(content, button) {
                 const card = document.createElement('div');
                 card.className = 'bg-[#374151] p-5 rounded-xl flex flex-col sm:flex-row justify-between items-center gap-4 fade-in';
-                
-                const formattedInstallment = parseFloat(data.installmentValue).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                const formattedTotal = parseFloat(data.totalValue).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-                card.innerHTML = `
-                    <div>
-                        <p class="text-white font-bold text-xl">${data.term}x de <span class="text-[#22c55e]">${formattedInstallment}</span></p>
-                        <p class="text-sm text-gray-400">Total a pagar: ${formattedTotal} (CET: ${data.cet.replace('.',',')}% a.m.)</p>
-                    </div>
-                    <button 
-                        class="whatsapp-btn w-full sm:w-auto bg-[#25D366] hover:bg-[#1DAE51] text-white font-bold py-2 px-6 rounded-lg transition whitespace-nowrap"
-                        data-amount="${loanAmountSlider.value}"
-                        data-term="${data.term}"
-                        data-installment="${data.installmentValue}"
-                    >
-                        Contratar via WhatsApp
-                    </button>
-                `;
+                card.innerHTML = `<div>${content}</div>`;
+                card.appendChild(button);
                 return card;
             }
 
-            // --- LÓGICA DO WHATSAPP ---
-            resultsContainer.addEventListener('click', (e) => {
-                if (e.target.classList.contains('whatsapp-btn')) {
-                    const button = e.target;
-                    const amount = parseInt(button.dataset.amount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                    const term = button.dataset.term;
-                    const installment = parseFloat(button.dataset.installment).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-                    const message = `Olá! Tenho interesse em contratar um empréstimo. Simulei no site o valor de ${amount} e gostaria da opção de ${term} parcelas de ${installment}. Podemos continuar?`;
-                    const phoneNumber = '558299342071'; // SUBSTITUA PELO NÚMERO DE TELEFONE REAL
-                    
+            function createWhatsappButton(message) {
+                const button = document.createElement('button');
+                button.className = 'whatsapp-btn w-full sm:w-auto bg-[#25D366] hover:bg-[#1DAE51] text-white font-bold py-2 px-6 rounded-lg transition whitespace-nowrap';
+                button.textContent = 'Contratar via WhatsApp';
+                button.onclick = () => {
                     const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
-                    
                     window.open(whatsappUrl, '_blank');
-                }
+                };
+                return button;
+            }
+
+            function createPixCard(amount) {
+                const totalValue = amount * (1 + interestRate);
+                const content = `
+                    <p class="text-white font-bold text-xl">Pagamento Único via Pix</p>
+                    <p class="text-sm text-gray-400">Valor a pagar: <span class="text-[#22c55e] font-semibold">${formatCurrency(totalValue)}</span></p>
+                `;
+                const message = `Olá! Simulei um empréstimo de ${formatCurrency(amount)} com pagamento via Pix no valor total de ${formatCurrency(totalValue)}. Gostaria de continuar.`;
+                const button = createWhatsappButton(message);
+                return createBaseCard(content, button);
+            }
+
+            function createInstallmentCard(amount, term) {
+                const totalValue = amount * (1 + interestRate);
+                const installmentValue = totalValue / term;
+                const content = `
+                    <p class="text-white font-bold text-xl">${term}x de <span class="text-[#22c55e]">${formatCurrency(installmentValue)}</span></p>
+                    <p class="text-sm text-gray-400">Total a pagar: ${formatCurrency(totalValue)} (Juros de 25%)</p>
+                `;
+                const message = `Olá! Simulei um empréstimo de ${formatCurrency(amount)} em ${term}x de ${formatCurrency(installmentValue)}. Gostaria de continuar.`;
+                const button = createWhatsappButton(message);
+                return createBaseCard(content, button);
+            }
+
+            function createCreditCard(amount) {
+                const content = `
+                    <p class="text-white font-bold text-xl">Pagamento via Cartão de Crédito</p>
+                    <p class="text-sm text-gray-400">As taxas da maquininha serão aplicadas. Fale com um consultor para saber o valor final.</p>
+                `;
+                const message = `Olá! Gostaria de consultar as condições de um empréstimo de ${formatCurrency(amount)} para pagamento no cartão de crédito.`;
+                const button = createWhatsappButton(message);
+                button.textContent = 'Consultar Taxas no WhatsApp';
+                return createBaseCard(content, button);
+            }
+            
+            // --- LÓGICA DO BOTÃO DE NEGOCIAÇÃO ---
+            negotiateBtn.addEventListener('click', () => {
+                const message = `Olá! Gostaria de negociar um empréstimo com valor superior a R$ 1.500.`;
+                const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
             });
 
             // --- LÓGICA DO FAQ (ACCORDION) ---
@@ -365,9 +412,9 @@
             document.getElementById('currentYear').textContent = new Date().getFullYear();
 
             // --- INICIALIZAÇÃO ---
-            // Seleciona o botão de 36x por padrão ao carregar a página
-            document.querySelector('.term-btn[data-term="36"]').classList.add('selected', 'bg-[#10b981]');
-            document.querySelector('.term-btn[data-term="36"]').classList.remove('bg-gray-700');
+            // Define um estado inicial para os botões de parcela
+            document.querySelector('.term-btn[data-term="2"]').classList.add('bg-[#10b981]');
+            document.querySelector('.term-btn[data-term="2"]').classList.remove('bg-gray-700', 'hover:bg-gray-600');
         });
     </script>
 </body>
